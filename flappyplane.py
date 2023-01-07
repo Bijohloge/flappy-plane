@@ -15,6 +15,8 @@ screen = pygame.display.set_mode(size)
 
 points = 0
 
+background = pygame.image.load("background.png")
+
 cube = cube.Cube(40, 40)
 clock = pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT, 4000, 100)
@@ -77,7 +79,7 @@ while True:
     if cooldown > 0:
         cooldown -= 1
 
-    screen.fill((0, 0, 0))
+    screen.blit(background, pygame.rect.Rect(0, 0, 720, 480))
 
     for x in pipe:
         # pygame.draw.rect(screen, (255, 0, 0), x.rect)

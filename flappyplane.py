@@ -5,6 +5,7 @@ import random
 from pygame.surface import Surface, SurfaceType
 
 import cube
+import pipes
 from pipes import Pipe
 
 pygame.init()
@@ -15,7 +16,9 @@ screen = pygame.display.set_mode(size)
 
 points = 0
 
-background = pygame.image.load("background.png")
+background = pygame.image.load("background.png").convert()
+
+pipes.load_pipes()
 
 cube = cube.Cube(40, 40)
 clock = pygame.time.Clock()
@@ -55,6 +58,15 @@ def check_for_end():
             sys.exit()
 
 
+del_pipes = list()
+
+
+def remove_pipes():
+    for p in del_pipes:
+        pipe.remove(p)
+    del_pipes.clear()
+
+
 while True:
     clock.tick(60)
     for event in pygame.event.get():
@@ -79,15 +91,16 @@ while True:
     if cooldown > 0:
         cooldown -= 1
 
-    screen.blit(background, pygame.rect.Rect(0, 0, 720, 480))
+    screen.blit(background, (0, 0))
+    remove_pipes()
 
     for x in pipe:
         # pygame.draw.rect(screen, (255, 0, 0), x.rect)
-        x.render(screen)
         x.move(-1, 0)
         points = check_for_points(x, points)
         if x.x < -64:
-            pipe.remove(x)
+            del_pipes.append(x)
+        x.render(screen)
 
     screen.blit(cube.image, cube.rect)
     screen.blit(text, pos)
